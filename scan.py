@@ -2,6 +2,8 @@ import argparse
 import re
 import socket
 
+from concurrent.futures import ThreadPoolExecutor
+
 
 def cli():
     parser = argparse.ArgumentParser(add_help=False)
@@ -11,14 +13,21 @@ def cli():
 
     args = parser.parse_args()
 
-    target:str = args.host
-    ports: list[int] = args.ports
+    host: str = args.host
+    ports: list[int] = parse_ports(args.ports) 
 
-    # Single Port
+    print('Testing {}:'.format(host)) 
 
-    # Sequential Scan
+    # Sequential
+    for port in ports:
+        if is_open(host, port):
+            print('{}: Open'.format(port))
+        else:
+            print('{}: Closed'.format(port))
+
 
     # Concurrent Scan
+    
 
 
 def is_open(host: str, port: int) -> bool:
@@ -52,6 +61,7 @@ def parse_ports(ports: str) -> list[int]:
         return list(range(start, end+1))
 
     raise ValueError('Error: ports {} is not in a valid format'.format(ports))
+
 
 if __name__ == '__main__':
     cli()
