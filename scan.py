@@ -12,6 +12,7 @@ def cli():
     parser.add_argument('--ports', '-p', required=True, help='Ports to Scan (Supported Formats: single port, start-end, comma-sep)')
     parser.add_argument('--threads', '-t',type=int, help='Max number of scans to perform at once')
     parser.add_argument('--verbose', '-v', action='store_true', help='Setting this will display closed ports')
+    parser.add_argument('--help', action='help', help='Opens the Help Menu')
 
     args = parser.parse_args()
 
