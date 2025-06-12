@@ -16,7 +16,13 @@ def cli():
     args = parser.parse_args()
 
     host: str = args.host
-    ports: list[int] = parse_ports(args.ports) 
+
+    try:
+        ports: list[int] = parse_ports(args.ports) 
+    except ValueError as e:
+        print(e)
+        return
+
     threads = args.threads 
     verbose = args.verbose
 
@@ -78,7 +84,7 @@ def parse_ports(ports: str) -> list[int]:
 
         return list(range(start, end+1))
 
-    raise ValueError('Error: ports {} is not in a valid format'.format(ports))
+    raise ValueError('Error: ports {} is not in a valid format (e.g. number, start-end, number,number,...,number)'.format(ports))
 
 
 if __name__ == '__main__':
