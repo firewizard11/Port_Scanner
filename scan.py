@@ -3,21 +3,21 @@ import socket
 
 
 def cli():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(add_help=False)
 
-    parser.add_argument('--target', '-t')
-    parser.add_argument('--ports', '-p')
+    parser.add_argument('--host', '-h', required=True, help='The Target IPv4 Address')
+    parser.add_argument('--ports', '-p', required=True, help='Ports to Scan (Supported Formats: single port, start-end, comma-sep)')
 
     args = parser.parse_args()
 
-    target = args.target
-    ports = args.ports
+    target:str = args.host
+    ports: list[int] = args.ports
 
-    print('Testing {}:'.format(target))
-    if is_open(target, int(ports)):
-        print('{}: Open'.format(ports))
-    else:
-        print('{}: Closed'.format(ports))
+    # Single Port
+
+    # Sequential Scan
+
+    # Concurrent Scan
 
 
 def is_open(host: str, port: int) -> bool:
