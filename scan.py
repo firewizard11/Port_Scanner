@@ -33,9 +33,8 @@ def cli():
             return
 
     threads = args.threads 
-
-    if threads is not None and threads < 1:
-        print('Error: threads must be greater than 0 not {}'.format(threads))
+    if threads and threads < 1:
+        print('Error: --threads should be greater than 0, not {}'.format(threads))
         return
 
     verbose = args.verbose
