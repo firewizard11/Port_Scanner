@@ -39,7 +39,7 @@ def cli():
     except KeyboardInterrupt:
         if pool:
             pool.shutdown(wait=False, cancel_futures=True)
-        quit()
+
 
 def test_port(host: str, port: int, verbose: bool = False) -> None:
     if is_open(host, port):
