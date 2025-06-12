@@ -10,24 +10,36 @@ def cli():
 
     parser.add_argument('--host', '-h', required=True, help='The Target IPv4 Address')
     parser.add_argument('--ports', '-p', required=True, help='Ports to Scan (Supported Formats: single port, start-end, comma-sep)')
+    parser.add_argument('--threads', '-t',type=int, help='Max number of scans to perform at once')
 
     args = parser.parse_args()
 
     host: str = args.host
     ports: list[int] = parse_ports(args.ports) 
+    threads = args.threads 
 
     print('Testing {}:'.format(host)) 
 
-    # Sequential
-    for port in ports:
-        if is_open(host, port):
-            print('{}: Open'.format(port))
-        else:
-            print('{}: Closed'.format(port))
+    if not threads:
 
+        # Sequential
+        for port in ports:
+            test_port(host, port)
 
-    # Concurrent Scan
-    
+    else:
+
+        # Concurrent Scan
+        pool = ThreadPoolExecutor(max_workers=threads)
+        
+        for port in ports:
+            pool.submit(test_port, host, port)
+        
+
+def test_port(host: str, port: int) -> None:
+    if is_open(host, port):
+        print('{}: Open'.format(port))
+    else:
+        print('{}: Closed'.format(port))
 
 
 def is_open(host: str, port: int) -> bool:
