@@ -19,21 +19,27 @@ def cli():
     ports: list[int] = parse_ports(args.ports) 
     threads = args.threads 
     verbose = args.verbose
-    print(verbose)
 
     print('Testing {}:'.format(host)) 
+    pool = None
+    
+    try:
+        if not threads:
+            # Sequential
+            for port in ports:
+                test_port(host, port, verbose)
+        else:
+            # Concurrent Scan
+            pool = ThreadPoolExecutor(max_workers=threads)
+        
+            for port in ports:
+                pool.submit(test_port, host, port, verbose)
 
-    if not threads:
-        # Sequential
-        for port in ports:
-            test_port(host, port, verbose)
-    else:
-        # Concurrent Scan
-        pool = ThreadPoolExecutor(max_workers=threads)
-        
-        for port in ports:
-            pool.submit(test_port, host, port, verbose)
-        
+            pool.shutdown()
+    except KeyboardInterrupt:
+        if pool:
+            pool.shutdown(wait=False, cancel_futures=True)
+        quit()
 
 def test_port(host: str, port: int, verbose: bool = False) -> None:
     if is_open(host, port):
@@ -51,7 +57,7 @@ def is_open(host: str, port: int) -> bool:
 		try:
 			sock.connect(addr)
 			return True
-		except:
+		except (TimeoutError, ConnectionRefusedError):
 			return False
 
 
