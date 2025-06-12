@@ -3,7 +3,21 @@ import socket
 
 
 def cli():
-	pass
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument('--target', '-t')
+    parser.add_argument('--ports', '-p')
+
+    args = parser.parse_args()
+
+    target = args.target
+    ports = args.ports
+
+    print('Testing {}:'.format(target))
+    if is_open(target, int(ports)):
+        print('{}: Open'.format(ports))
+    else:
+        print('{}: Closed'.format(ports))
 
 
 def is_open(host: str, port: int) -> bool:
@@ -24,14 +38,4 @@ def parse_ports(ports: str) -> list[int]:
 
 
 if __name__ == '__main__':
-	print('Starting Test...')
-	
-	test_host = 'scanme.nmap.org'
-	test_ports = [22, 80, 443, 1024, 2000, 3000]
-
-	print('Testing {}'.format(test_host))
-
-	for port in test_ports:
-		print('{}: {}'.format(port, is_open(test_host, port)))
-
-	print('Test Complete!')
+    cli()
