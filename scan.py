@@ -1,4 +1,5 @@
 import argparse
+import re
 import socket
 
 
@@ -34,8 +35,23 @@ def is_open(host: str, port: int) -> bool:
 
 
 def parse_ports(ports: str) -> list[int]:
-	pass
+    re_dash = re.compile(r'^\d+-\d+$')
+    re_csv = re.compile(r'^\d+(,\d+)*$')
+    re_single = re.compile(r'^\d+$')
 
+    if re_single.fullmatch(ports):
+        return [int(ports)]
+
+    if re_csv.fullmatch(ports):
+        return list(map(int, ports.split(',')))
+
+    if re_dash.fullmatch(ports):
+        start = int(ports.split('-')[0])
+        end = int(ports.split('-')[1])
+
+        return list(range(start, end+1))
+
+    raise ValueError('Error: ports {} is not in a valid format'.format(ports))
 
 if __name__ == '__main__':
     cli()
