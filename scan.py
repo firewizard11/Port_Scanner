@@ -8,7 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 def cli():
     parser = argparse.ArgumentParser(add_help=False)
 
-    parser.add_argument('--host', '-h', required=True, help='The Target IPv4 Address')
+    parser.add_argument('--host', '-h', required=True, help='The Target Address')
     parser.add_argument('--ports', '-p', required=True, help='Ports to Scan (Supported Formats: single port, start-end, comma-sep)')
     parser.add_argument('--threads', '-t',type=int, help='Max number of scans to perform at once')
     parser.add_argument('--verbose', '-v', action='store_true', help='Setting this will display closed ports')
@@ -89,7 +89,7 @@ def parse_ports(ports: str) -> list[int]:
 
         return list(range(start, end+1))
 
-    raise ValueError('Error: ports {} is not in a valid format (e.g. number, start-end, number,number,...,number)'.format(ports))
+    raise ValueError('Error: ports {} is not in a valid format (e.g. number | start-end | number,number,...,number)'.format(ports))
 
 
 if __name__ == '__main__':
