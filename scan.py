@@ -57,6 +57,8 @@ def cli():
 
             pool.shutdown()
     except KeyboardInterrupt:
+        print('\nCaught Keyboard Interrupt: Exiting...')
+
         if pool:
             pool.shutdown(wait=False, cancel_futures=True)
 
